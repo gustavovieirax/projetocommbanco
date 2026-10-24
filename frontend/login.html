@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login</title>
+  <link rel="stylesheet" href="assets/style.css" />
+</head>
+<body class="login-shell">
+  <div class="login-box">
+    <h2>Login</h2>
+    <div class="campo">
+      <label for="email">E-mail</label>
+      <input id="email" type="email" placeholder="E-mail" value="admin@estudio.com" />
+    </div>
+    <div class="campo">
+      <label for="senha">Senha</label>
+      <input id="senha" type="password" placeholder="Senha" value="admin123" />
+    </div>
+    <button type="button" onclick="login()">Entrar</button>
+    <div id="mensagem" class="erro"></div>
+  </div>
+
+  <script>
+    async function login() {
+      const email = document.getElementById('email').value;
+      const senha = document.getElementById('senha').value;
+      const mensagem = document.getElementById('mensagem');
+
+      try {
+        const resposta = await fetch('http://localhost:8000/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, senha })
+        });
+
+        const dados = await resposta.json();
+        if (!resposta.ok) {
+          throw new Error(dados.detail || 'Erro ao fazer login.');
+        }
+
+        localStorage.setItem('token', dados.acess_token);
+        localStorage.setItem('usuario', JSON.stringify(dados.usuario));
+        mensagem.classList.add('mensagem-sucesso');
+        mensagem.textContent = 'Login realizado com sucesso!';
+        window.location.href = 'dashboard.html';
+      } catch (erro) {
+        mensagem.classList.remove('mensagem-sucesso');
+        mensagem.textContent = 'Erro: ' + erro.message;
+      }
+    }
+  </script>
+</body>
+</html>

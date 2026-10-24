@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard</title>
+  <link rel="stylesheet" href="assets/style.css" />
+</head>
+<body>
+  <div class="container">
+    <header class="topbar">
+      <h2>Dashboard</h2>
+      <nav class="menu">
+        <a href="index.html">Início</a>
+        <a href="clientes.html">Clientes</a>
+        <a href="tatuadores.html">Tatuadores</a>
+        <a href="agendamentos.html">Agendamentos</a>
+      </nav>
+    </header>
+
+    <main class="card">
+      <div id="usuario"></div>
+      <div class="dashboard-grid">
+        <div class="metric">
+          <span class="label">Clientes</span>
+          <span class="valor">24</span>
+        </div>
+        <div class="metric">
+          <span class="label">Tatuadores</span>
+          <span class="valor">08</span>
+        </div>
+        <div class="metric">
+          <span class="label">Agendamentos</span>
+          <span class="valor">13</span>
+        </div>
+      </div>
+      <div style="margin-top: 22px;">
+        <button class="button-secondary" type="button" onclick="logout()">Sair</button>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const token = localStorage.getItem('token');
+
+    async function carregarDashboard() {
+      if (!token) {
+        window.location.href = 'login.html';
+        return;
+      }
+
+      try {
+        const resposta = await fetch('http://localhost:8000/dashboard', {
+          headers: { Authorization: 'Bearer ' + token }
+        });
+
+        if (!resposta.ok) {
+          throw new Error('Sessão inválida');
+        }
+
+        const dados = await resposta.json();
+        document.getElementById('usuario').innerHTML = `
+          <h3>Bem-vindo(a), ${dados.usuario.nome}</h3>
+          <p><strong>E-mail:</strong> ${dados.usuario.email}</p>
+        `;
+      } catch (erro) {
+        alert('Você precisa fazer login primeiro.');
+        window.location.href = 'login.html';
+      }
+    }
+
+    function logout() {
+      localStorage.removeItem('token');
+      localStorage.removeItem('usuario');
+      window.location.href = 'login.html';
+    }
+
+    carregarDashboard();
+  </script>
+</body>
+</html>

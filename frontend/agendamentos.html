@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Agendamentos</title>
+  <link rel="stylesheet" href="assets/style.css" />
+</head>
+<body>
+  <div class="container">
+    <header class="topbar">
+      <h2>Agendamentos</h2>
+      <nav class="menu">
+        <a href="index.html">Início</a>
+        <a href="dashboard.html">Dashboard</a>
+      </nav>
+    </header>
+
+    <section class="panel">
+      <form id="formAgendamento">
+        <div>
+          <label for="idcliente">Cliente</label>
+          <select id="idcliente"></select>
+        </div>
+        <div>
+          <label for="idtatuador">Tatuador</label>
+          <select id="idtatuador"></select>
+        </div>
+        <div>
+          <label for="dataagendamento">Data</label>
+          <input id="dataagendamento" type="date" required />
+        </div>
+        <div>
+          <label for="horaagendamento">Hora</label>
+          <input id="horaagendamento" type="time" required />
+        </div>
+        <div>
+          <label for="descricaotatuagem">Descrição</label>
+          <input id="descricaotatuagem" placeholder="Descrição" />
+        </div>
+        <div>
+          <label for="valortatuagem">Valor</label>
+          <input id="valortatuagem" type="number" step="0.01" placeholder="Valor" />
+        </div>
+        <div>
+          <label for="status">Status</label>
+          <select id="status">
+            <option value="pendente">Pendente</option>
+            <option value="confirmado">Confirmado</option>
+            <option value="concluido">Concluído</option>
+            <option value="cancelado">Cancelado</option>
+          </select>
+        </div>
+        <div style="display:flex; align-items:flex-end;">
+          <button type="submit">Salvar agendamento</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="card">
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Cliente</th>
+              <th>Tatuador</th>
+              <th>Data</th>
+              <th>Hora</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="listaAgendamentos"></tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    async function carregarClientes() {
+      const resposta = await fetch('http://localhost:8000/clientes');
+      const clientes = await resposta.json();
+      const select = document.getElementById('idcliente');
+      select.innerHTML = clientes.map(item => `<option value="${item.idcliente}">${item.nome}</option>`).join('');
+    }
+
+    async function carregarTatuadores() {
+      const resposta = await fetch('http://localhost:8000/tatuadores');
+      const tatuadores = await resposta.json();
+      const select = document.getElementById('idtatuador');
+      select.innerHTML = tatuadores.map(item => `<option value="${item.idtatuador}">${item.nometatuador}</option>`).join('');
+    }
+
+    async function carregarAgendamentos() {
+      const resposta = await fetch('http://localhost:8000/agendamentos');
+      const agendamentos = await resposta.json();
+      const tbody = document.getElementById('listaAgendamentos');
+      tbody.innerHTML = agendamentos.map(item => `
+        <tr>
+          <td>${item.idagendamento}</td>
+          <td>${item.nome_cliente || '-'}</td>
+          <td>${item.nometatuador || '-'}</td>
+          <td>${item.dataagendamento}</td>
+          <td>${item.horaagendamento}</td>
+          <td>${item.status}</td>
+        </tr>
+      `).join('');
+    }
+
+    document.getElementById('formAgendamento').addEventListener('submit', async (evento) => {
+      evento.preventDefault();
+      const payload = {
+        idcliente: Number(document.getElementById('idcliente').value),
+        idtatuador: Number(document.getElementById('idtatuador').value),
+        dataagendamento: document.getElementById('dataagendamento').value,
+        horaagendamento: document.getElementById('horaagendamento').value,
+        descricaotatuagem: document.getElementById('descricaotatuagem').value,
+        valortatuagem: Number(document.getElementById('valortatuagem').value || 0),
+        status: document.getElementById('status').value
+      };
+
+      const resposta = await fetch('http://localhost:8000/agendamentos', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      if (resposta.ok) {
+        document.getElementById('formAgendamento').reset();
+        carregarAgendamentos();
+      } else {
+        const erro = await resposta.json();
+        alert('Erro: ' + (erro.detail || 'Não foi possível salvar o agendamento.'));
+      }
+    });
+
+    carregarClientes();
+    carregarTatuadores();
+    carregarAgendamentos();
+  </script>
+</body>
+</html>
