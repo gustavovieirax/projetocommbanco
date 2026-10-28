@@ -1,29 +1,68 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Organize clientes, tatuadores e agendamentos do seu estúdio em um só lugar.">
   <title>Estúdio de Tatuagem</title>
-  <link rel="stylesheet" href="assets/style.css" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
-  <div class="container">
-    <header class="topbar">
-      <h1>Estúdio de Tatuagem</h1>
-      <nav class="menu">
-        <a href="login.html">Login</a>
-        <a href="dashboard.html">Dashboard</a>
-        <a href="clientes.html">Clientes</a>
-        <a href="tatuadores.html">Tatuadores</a>
-        <a href="agendamentos.html">Agendamentos</a>
-      </nav>
-    </header>
+  <nav class="navbar navbar-dark bg-dark">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">Estúdio de Tatuagem</a>
+      <a href="login.html" class="btn btn-light">Entrar</a>
+    </div>
+  </nav>
 
-    <main class="card">
-      <h2>Visão geral do projeto</h2>
-      <p>Backend em FastAPI + banco SQLite para facilitar os testes locais.</p>
-      <p>Use o login com e-mail <strong>admin@estudio.com</strong> e senha <strong>admin123</strong>.</p>
-    </main>
-  </div>
+  <main class="container py-4 py-lg-5">
+    <section class="hero">
+      <span class="eyebrow">Gestão feita para criar</span>
+      <h1 class="my-3">Seu estúdio, organizado do seu jeito.</h1>
+      <p class="mb-4">Cuide da agenda, acompanhe sua equipe e mantenha cada detalhe do atendimento em ordem — para dedicar mais tempo à arte.</p>
+      <div>
+        <a href="login.html" class="btn btn-primary btn-lg">Acessar o painel</a>
+      </div>
+    </section>
+
+    <section class="py-5">
+      <div class="section-heading mb-4">
+        <span class="feature-number">UM SÓ LUGAR</span>
+        <h2 class="mt-2">Tudo que acontece no estúdio, com clareza.</h2>
+        <p>Uma rotina mais simples para organizar o atendimento e acompanhar o trabalho da equipe.</p>
+      </div>
+      <div class="row g-3">
+        <div class="col-md-4">
+          <article class="feature-card">
+            <span class="feature-number">01 / CLIENTES</span>
+            <h3 class="h5 mt-3">Relacionamentos bem cuidados</h3>
+            <p class="text-muted-custom mb-0">Consulte os dados e mantenha os cadastros do estúdio em ordem.</p>
+          </article>
+        </div>
+        <div class="col-md-4">
+          <article class="feature-card">
+            <span class="feature-number">02 / EQUIPE</span>
+            <h3 class="h5 mt-3">Talento e especialidade</h3>
+            <p class="text-muted-custom mb-0">Conheça a equipe, suas senioridades e os estilos que domina.</p>
+          </article>
+        </div>
+        <div class="col-md-4">
+          <article class="feature-card">
+            <span class="feature-number">03 / AGENDA</span>
+            <h3 class="h5 mt-3">Sessões em perspectiva</h3>
+            <p class="text-muted-custom mb-0">Organize os atendimentos com data, horário e responsável.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-top py-4">
+    <div class="container d-flex flex-column flex-sm-row justify-content-between gap-2 text-muted-custom">
+      <span>Estúdio de Tatuagem</span>
+      <span>Organização para abrir espaço à criatividade.</span>
+    </div>
+  </footer>
 </body>
 </html>

@@ -1,81 +1,36 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dashboard</title>
-  <link rel="stylesheet" href="assets/style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard — Estúdio de Tatuagem</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
-  <div class="container">
-    <header class="topbar">
-      <h2>Dashboard</h2>
-      <nav class="menu">
-        <a href="index.html">Início</a>
-        <a href="clientes.html">Clientes</a>
-        <a href="tatuadores.html">Tatuadores</a>
-        <a href="agendamentos.html">Agendamentos</a>
-      </nav>
-    </header>
+  <nav class="navbar navbar-dark bg-dark mb-4">
+    <div class="container">
+      <a class="navbar-brand" href="dashboard.html">Estúdio de Tatuagem</a>
+      <button type="button" onclick="sair()" class="btn btn-outline-light btn-sm">Sair</button>
+    </div>
+  </nav>
 
-    <main class="card">
-      <div id="usuario"></div>
-      <div class="dashboard-grid">
-        <div class="metric">
-          <span class="label">Clientes</span>
-          <span class="valor">24</span>
-        </div>
-        <div class="metric">
-          <span class="label">Tatuadores</span>
-          <span class="valor">08</span>
-        </div>
-        <div class="metric">
-          <span class="label">Agendamentos</span>
-          <span class="valor">13</span>
-        </div>
-      </div>
-      <div style="margin-top: 22px;">
-        <button class="button-secondary" type="button" onclick="logout()">Sair</button>
-      </div>
-    </main>
-  </div>
-
-  <script>
-    const token = localStorage.getItem('token');
-
-    async function carregarDashboard() {
-      if (!token) {
-        window.location.href = 'login.html';
-        return;
-      }
-
-      try {
-        const resposta = await fetch('http://localhost:8000/dashboard', {
-          headers: { Authorization: 'Bearer ' + token }
-        });
-
-        if (!resposta.ok) {
-          throw new Error('Sessão inválida');
-        }
-
-        const dados = await resposta.json();
-        document.getElementById('usuario').innerHTML = `
-          <h3>Bem-vindo(a), ${dados.usuario.nome}</h3>
-          <p><strong>E-mail:</strong> ${dados.usuario.email}</p>
-        `;
-      } catch (erro) {
-        alert('Você precisa fazer login primeiro.');
-        window.location.href = 'login.html';
-      }
-    }
-
-    function logout() {
-      localStorage.removeItem('token');
-      localStorage.removeItem('usuario');
-      window.location.href = 'login.html';
-    }
-
-    carregarDashboard();
-  </script>
+  <main class="container py-3">
+    <div class="mb-4">
+      <h1>Painel</h1>
+      <div id="usuario" class="text-muted-custom">Carregando usuário...</div>
+    </div>
+    <div id="mensagemDashboard" class="alert" role="status" aria-live="polite"></div>
+    <section class="row g-3" aria-label="Áreas do sistema">
+      <div class="col-sm-6 col-lg-4"><a href="clientes.html" class="dashboard-link">Clientes</a></div>
+      <div class="col-sm-6 col-lg-4"><a href="tatuadores.html" class="dashboard-link">Tatuadores</a></div>
+      <div class="col-sm-6 col-lg-4"><a href="agendamentos.html" class="dashboard-link">Agendamentos</a></div>
+      <div class="col-sm-6 col-lg-4"><a href="senioridade.html" class="dashboard-link secondary">Senioridade</a></div>
+      <div class="col-sm-6 col-lg-4"><a href="estilos.html" class="dashboard-link secondary">Estilos</a></div>
+      <div class="col-sm-6 col-lg-4"><a href="cadastro.html" class="dashboard-link secondary">Novo Funcionário</a></div>
+    </section>
+  </main>
+  <script src="js/auth.js"></script>
+  <script src="js/dashboard.js"></script>
 </body>
 </html>
